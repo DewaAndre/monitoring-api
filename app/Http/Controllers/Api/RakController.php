@@ -3,18 +3,21 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use App\Models\Rak;
-
+use Illuminate\Http\Request;
 
 class RakController extends Controller
 {
-    public function store(Request $request)
-    {
-        return Rak::create([
-            'user_id' => $request->user_id,
-            'nama_rak' => $request->nama_rak
-        ]);
-    }
+    public function index($userId)
+{
+    $raks = Rak::with('monitorings')
+        ->where('user_id', $userId)
+        ->get();
+
+    return response()->json([
+        'success' => true,
+        'data' => $raks
+    ]);
 }
 
+}
